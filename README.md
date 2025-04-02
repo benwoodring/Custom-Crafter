@@ -119,7 +119,8 @@ Edit `.env` to customize:
 - **Allow writing to a file instead of using Mongo**
 - **Use Squarespace's webhooks instead of polling for orders (requires special approval from Squarespace)**
 - **Optimize Config/.env to avoid redundancies**
-
+- **Multi-tenant support**
+- **Themeing**
 ## Contact
 
 For issues or questions, open an issue on GitHub or contact ben.woodring@protonmail.com
