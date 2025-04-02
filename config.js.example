@@ -1,0 +1,61 @@
+// config.js
+require('dotenv').config();
+const { cleanEnv, str, port } = require('envalid');
+
+// Validate environment variables
+const env = cleanEnv(process.env, {
+  PORT: port({ default: 3000 }), // Optional, defaults to 3000
+  MONGODB_URI: str(), // Required
+  SQUARESPACE_API_KEY: str(), // Required
+  EMAIL_USER: str(), // Required
+  EMAIL_PASS: str(), // Required
+  EMAIL_ALIAS: str(), // Required
+  NOTIFICATION_EMAIL: str(), // Required
+  NODE_ENV: str({ choices: ['development', 'production'], default: 'development' }), // Optional, restricted values
+});
+
+const config = {
+  // Server Settings
+  port: env.PORT,
+
+  // CORS Settings
+  allowedOrigins: [
+    'https://www.examplesite.com',
+  ],
+
+  // MongoDB Settings
+  mongoUri: env.MONGODB_URI,
+
+  // Polling Settings
+  pollingInterval: 5 * 60 * 1000, // 5 minutes in milliseconds
+  squarespaceApi: {
+    url: 'https://api.squarespace.com/1.0/commerce/orders',
+    apiKey: env.SQUARESPACE_API_KEY,
+    userAgent: 'OrderPollApp/1.0',
+  },
+
+  // Email Settings
+  email: {
+    host: 'smtp.zoho.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: env.EMAIL_USER,
+      pass: env.EMAIL_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+    from: env.EMAIL_ALIAS,
+    to: env.NOTIFICATION_EMAIL,
+  },
+
+  // API Limits
+  jsonLimit: '20mb',
+  urlencodedLimit: '20mb',
+
+  // Environment
+  nodeEnv: env.NODE_ENV,
+};
+
+module.exports = config;
